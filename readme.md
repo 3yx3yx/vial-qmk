@@ -1,4 +1,12 @@
 # Quantum Mechanical Keyboard Firmware
+# Build environment for custom keyboard with MIDI CC and PC
+
+Usage:
+cd vial-qmk
+make orthomidi5x14:vial
+qmk flash orthomidi5x14_vial.bin
+
+
 
 [![Current Version](https://img.shields.io/github/tag/qmk/qmk_firmware.svg)](https://github.com/qmk/qmk_firmware/tags)
 [![Discord](https://img.shields.io/discord/440868230475677696.svg)](https://discord.gg/Uq7gcHh)
