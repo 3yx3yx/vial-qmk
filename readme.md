@@ -8,6 +8,22 @@ make orthomidi5x14:vial
 qmk flash orthomidi5x14_vial.bin
 ```
 
+Pre compiled firmware file: https://github.com/3yx3yx/vial-qmk/blob/vial/orthomidi5x14_vial.bin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 [![Current Version](https://img.shields.io/github/tag/qmk/qmk_firmware.svg)](https://github.com/qmk/qmk_firmware/tags)
 [![Discord](https://img.shields.io/discord/440868230475677696.svg)](https://discord.gg/Uq7gcHh)
