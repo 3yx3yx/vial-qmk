@@ -1,16 +1,16 @@
 {
-    "manufacturer": "3yx3yx",
-    "keyboard_name": "orthomidi5x14",
-    "maintainer": "3yx3yx",
+    "manufacturer": "Curlton",
+    "keyboard_name": "MIDIswitch",
+    "maintainer": "Curlton",
     "bootloader": "stm32-dfu",
     "diode_direction": "ROW2COL",
-    
-    "features": {
-	
-    },
-    
 
-    
+    "features": {
+
+    },
+
+
+
     "matrix_pins": {
         "cols": ["A1","A0","A3","A4","A5","A7","B0","B1","B9","B10","B13","B14","B15","A8",],
         "rows": ["C15","A15","B12","A6","A2"]

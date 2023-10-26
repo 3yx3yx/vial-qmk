@@ -23,12 +23,18 @@ extern MidiDevice midi_device;
 #define MI_PROG_UP ((0x8000 + 128 * 6) + 128 * 128 + 3)
 #define MI_PROG_DWN ((0x8000 + 128 * 6) + 128 * 128 + 4)
 #define KC_CUSTOM ((0x8000 + 128 * 6) + 128 * 128 + 5)
+#define MI_VELOCITY_0 ((0x8000 + 128 * 6) + 128 * 128 + 5)
+#define ENCODER_STEP_1 ( (0x8000 + 128 * 7) + 128 * 128 + 5)
+#undef KC_CUSTOM
+#define KC_CUSTOM (0x8000 + 128 * 7) + 128 * 128 + 5 + 17
+
 
 // enum custom_keycodes { MY_CUSTOM_KC = KC_CUSTOM, CUSTOM_KC_2, CUSTOM_KC_3 };
 
 static uint8_t  CCValue[128]    = {};
 static uint16_t MidiCurrentBank = 0;
 static uint8_t  MidiCurrentProg = 0;
+static uint8_t  encoder_step = 1;
 
 //char status_str[32] = "";
 
@@ -54,17 +60,33 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         uint8_t cc = keycode - MI_CC_UP_0;
 
         if (CCValue[cc] < 127) {
-            ++CCValue[cc];
+            if (record->event.key.row == KEYLOC_ENCODER_CW) {
+                CCValue[cc] += encoder_step;
+                if (CCValue[cc] > 127) {
+                    CCValue[cc] = 127;
+                }
+            } else {
+                ++CCValue[cc];
+            }
         }
         midi_send_cc(&midi_device, midi_config.channel, cc, CCValue[cc]);
 
-        //sprintf(status_str, "CC\nUp\n%d", cc);
+        // sprintf(status_str, "CC\nUp\n%d", cc);
 
     } else if (keycode >= MI_CC_DWN_0 && keycode < (MI_CC_DWN_0 + 128)) { // CC --
         uint8_t cc = keycode - MI_CC_DWN_0;
 
         if (CCValue[cc] > 0) {
-            --CCValue[cc];
+            if (record->event.key.row == KEYLOC_ENCODER_CCW) {
+                if (CCValue[cc] >= encoder_step) {
+                    CCValue[cc] -= encoder_step;
+                } else {
+                    CCValue[cc] = 0;
+                }
+
+            } else {
+                --CCValue[cc];
+            }
         }
         midi_send_cc(&midi_device, midi_config.channel, cc, CCValue[cc]);
 
@@ -111,11 +133,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
         //sprintf(status_str, "PC\n%d", val);
 
-    } else {
-    
-	 uint8_t lsb = 0;
-	 uint8_t msb = 0;
-	 
+    } else if (keycode >= MI_VELOCITY_0 && keycode < (MI_VELOCITY_0 + 128)) {
+        uint8_t val = keycode - MI_VELOCITY_0;
+        if (val >= 0 && val < 128) midi_config.velocity = val;
+
+    } else if (keycode >= ENCODER_STEP_1 && keycode < (ENCODER_STEP_1 + 16)) {
+        uint8_t val = keycode - ENCODER_STEP_1 + 1;
+        if (val >= 1 && val < 17) encoder_step = val;
+    }
+
+    else {
+        uint8_t lsb = 0;
+        uint8_t msb = 0;
+
         switch (keycode) {
             case MI_BANK_UP:
                 if (MidiCurrentBank < 0xFFFF) {
