@@ -2,7 +2,7 @@
     "name": "ortho5x14",
     "vendorId": "0xBEEF",
     "productId": "0x0000",
-    "lighting": "none",
+    "lighting": "vialrgb",
     "matrix": {"rows": 5, "cols": 14},
    
     "layouts": {
